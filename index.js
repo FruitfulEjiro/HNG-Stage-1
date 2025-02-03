@@ -8,6 +8,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+   res.send("Hello World!");
+});
 app.get("/:number", number);
 
 const PORT = 3000;
