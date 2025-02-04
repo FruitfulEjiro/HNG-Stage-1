@@ -46,18 +46,22 @@ const isPrime = (num) => {
 };
 
 const number = async (req, res, next) => {
-   const { number: num } = req.params;
-
+   const { number: num } = req.query;
+   if (!Number(num)) {
+      res.status(400).json({
+         number: "alphabet",
+         error: true,
+      });
+   }
    //    Check if Number is a Prime
-   const is_prime = isPrime(Number(num));
+   const is_prime = await isPrime(Number(num));
    //    Check if Number is Perfect
-   const is_perfect = isPerfect(Number(num));
+   const is_perfect = await isPerfect(Number(num));
    //    Check if Number is Armstrong
-   const properties = isArmStrong(num);
+   const properties = await isArmStrong(num);
    //    GEt sum of Digits
-   const digit_sum = getDigitSum(num);
-
-   //    Fetch the funfact
+   const digit_sum = await getDigitSum(num);
+   //  Fetch the funfact
    const response = await axios.get(`http://numbersapi.com/${num}/math`);
    if (!response.data) {
       return res.status(404).json({ error: "Fun fact not found." });
