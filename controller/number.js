@@ -55,13 +55,13 @@ const number = async (req, res, next) => {
    }
 
    //    Check if Number is a Prime
-   const is_prime = await isPrime(Number(num));
+   const is_prime = isPrime(Number(num));
    //    Check if Number is Perfect
-   const is_perfect = await isPerfect(Number(num));
+   const is_perfect = isPerfect(Number(num));
    //    Check if Number is Armstrong
-   const properties = await isArmStrong(num);
+   const properties = isArmStrong(num);
    //    GEt sum of Digits
-   const digit_sum = await getDigitSum(num);
+   const digit_sum = getDigitSum(num);
    //  Fetch the funfact
    const response = await axios.get(`http://numbersapi.com/${num}/math`);
    if (!response.data) {
