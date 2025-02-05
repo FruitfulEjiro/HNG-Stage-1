@@ -53,6 +53,7 @@ const number = async (req, res, next) => {
          error: true,
       });
    }
+
    //    Check if Number is a Prime
    const is_prime = await isPrime(Number(num));
    //    Check if Number is Perfect
