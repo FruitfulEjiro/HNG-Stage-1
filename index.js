@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
    res.send("Hello World!");
 });
-app.get("/classify-number", number);
+app.get("/api/classify-number", number);
 
 const PORT = 3000;
 app.listen(PORT, () => {
