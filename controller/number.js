@@ -49,7 +49,7 @@ const number = async (req, res, next) => {
    const { number: num } = req.query;
    if (!Number(num)) {
       res.status(400).json({
-         number: "alphabet",
+         number: null,
          error: true,
       });
    }
