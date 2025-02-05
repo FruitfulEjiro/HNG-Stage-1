@@ -24,7 +24,7 @@ To start the application, run the following command:
 ```bash
 npm start
 ```
-The API will be available at `hng-stage-1-gilt.vercel.app/classify-number`.
+The Live API will be available at `hng-stage-1-gilt.vercel.app/classify-number`.
 
 ### Endpoints
 - **GET /classify-number**: Check properties of a number.
