@@ -70,14 +70,12 @@ const number = async (req, res, next) => {
    const fun_fact = response.data;
 
    res.status(200).json({
-      data: {
-         number: num,
-         is_prime,
-         is_perfect,
-         properties,
-         digit_sum,
-         fun_fact,
-      },
+      number: num,
+      is_prime,
+      is_perfect,
+      properties,
+      digit_sum,
+      fun_fact,
    });
 };
 
