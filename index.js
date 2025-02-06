@@ -9,13 +9,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const funfact = async (num) => {
-   console.log("funfact",typeof(num), num)
    const response = await axios.get(`http://numbersapi.com/${num}/math`);
    if (!response.data) {
       return res.status(404).json({ error: "Fun fact not found." });
    }
    const funfact = response.data;
-   console.log(funfact, "funny");
    return funfact;
 };
 
@@ -25,11 +23,9 @@ app.get("/", (req, res) => {
 
 app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
-   console.log(req.query);
 
    // Check if Number is a Prime
    const isPrime = () => {
-      console.log("prime", number)
       if (number <= 1) return false;
       if (number === 2) return true;
       for (let i = 2; i <= Math.sqrt(number); i++) {
@@ -41,7 +37,6 @@ app.get("/api/classify-number", async (req, res) => {
 
    // Check id Number is Perfect
    const isPerfect = () => {
-      console.log("perfect", number)
       if (number <= 1) return false;
       let sum = 1;
       for (let i = 2; i <= Math.sqrt(number); i++) {
@@ -53,16 +48,15 @@ app.get("/api/classify-number", async (req, res) => {
             }
          }
       }
-      return sum === number;
+      return sum === Number(number);
    };
    const is_perfect = isPerfect();
 
    // Check if Number is Armstrong
    const isArmStrong = () => {
-      console.log("number", number);
       const numOfDigits = number.length;
       let sum = null;
-      if (number >= 0) {
+      if (number > 0) {
          sum = number.split("").reduce((acc, digit) => {
             return acc + Math.pow(Number(digit), numOfDigits);
          }, 0);
@@ -71,7 +65,7 @@ app.get("/api/classify-number", async (req, res) => {
       const armstrong = sum == number;
       const numType = number % 2 === 0 ? "even" : "odd";
 
-      return armstrong ? ["Armstrong", numType] : [numType];
+      return armstrong ? ["armstrong", numType] : [numType];
    };
    const properties = isArmStrong();
 
@@ -96,6 +90,12 @@ app.get("/api/classify-number", async (req, res) => {
       properties,
       digit_sum,
       fun_fact,
+   });
+});
+
+app.get("/api/classify-number", async (req, res) => {
+   res.status(400).json({
+      error: true,
    });
 });
 
