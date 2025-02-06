@@ -87,11 +87,12 @@ app.get("/api/classify-number", async (req, res) => {
 
    // Calculate Sum of Digits
    const getDigitSum = () => {
-      let sum = 0;
-      const numArr = Array.from(String(number), Number);
-      numArr.forEach((number) => {
-         sum += number;
-      });
+      // Convert the number to a string and remove the negative sign if present
+      const digits = Math.abs(number).toString().split("");
+
+      // Sum the digits
+      const sum = digits.reduce((acc, digit) => acc + Number(digit), 0);
+
       return sum;
    };
    const digit_sum = getDigitSum();
