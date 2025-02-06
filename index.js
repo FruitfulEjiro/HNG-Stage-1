@@ -24,6 +24,13 @@ app.get("/", (req, res) => {
 app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
 
+   if (!Number(number)) {
+      res.status(400).json({
+         number: number,
+         error: true,
+      });
+   }
+
    // Check if Number is a Prime
    const isPrime = () => {
       if (number <= 1) return false;
