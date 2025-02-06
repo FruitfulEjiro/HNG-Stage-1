@@ -24,6 +24,13 @@ app.get("/", (req, res) => {
 app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
 
+   if (!number) {
+      res.status(400).json({
+         error: true,
+      });
+      return;
+   }
+
    if (!Number(number)) {
       res.status(400).json({
          number: number,
@@ -100,11 +107,11 @@ app.get("/api/classify-number", async (req, res) => {
    });
 });
 
-app.get("/api/classify-number", async (req, res) => {
-   res.status(400).json({
-      error: true,
-   });
-});
+// app.get("/api/classify-number", async (req, res) => {
+//    res.status(400).json({
+//       error: true,
+//    });
+// });
 
 const PORT = 3000;
 app.listen(PORT, () => {
