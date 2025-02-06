@@ -25,14 +25,16 @@ app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
 
    if (!number) {
-      res.status(400).json({
+      return res.status(400).json({
          error: true,
       });
-      return;
    }
 
-   if (!Number(number)) {
-      res.status(400).json({
+   const num = Number(number);
+
+   // Check if the input is a valid number
+   if (isNaN(num)) {
+      return res.status(400).json({
          number: number,
          error: true,
       });
@@ -106,12 +108,6 @@ app.get("/api/classify-number", async (req, res) => {
       fun_fact,
    });
 });
-
-// app.get("/api/classify-number", async (req, res) => {
-//    res.status(400).json({
-//       error: true,
-//    });
-// });
 
 const PORT = 3000;
 app.listen(PORT, () => {
