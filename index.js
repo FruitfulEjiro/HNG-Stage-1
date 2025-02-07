@@ -8,102 +8,81 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Fetch Funfact
 const funfact = async (num) => {
-   const response = await axios.get(`http://numbersapi.com/${num}/math`);
-   if (!response.data) {
-      return res.status(404).json({ error: "Fun fact not found." });
+   try {
+      const response = await axios.get(`http://numbersapi.com/${num}/math`);
+      return response.data;
+   } catch (error) {
+      return "No fun fact found for this number.";
    }
-   const funfact = response.data;
-   return funfact;
 };
 
-// Endpoints
-app.get("/", (req, res) => {
-   res.send("Hello World!");
-});
+// Check if Number is a Prime
+const isPrime = (num) => {
+   if (num <= 1) return false;
+   if (num === 2) return true;
+   if (num % 2 === 0) return false; // Skip even numbers
+   for (let i = 3; i <= Math.sqrt(num); i += 2) {
+      if (num % i === 0) return false;
+   }
+   return true;
+};
 
+// Check if Number is Perfect
+const isPerfect = (num) => {
+   if (num <= 1) return false;
+   let sum = 1;
+   for (let i = 2; i <= Math.sqrt(num); i++) {
+      if (num % i === 0) {
+         sum += i + (num / i === i ? 0 : num / i);
+      }
+   }
+   return sum === num;
+};
+
+// Check if Number is Armstrong
+const isArmstrong = (num) => {
+   const numStr = Math.abs(num).toString();
+   const numOfDigits = numStr.length;
+   const sum = numStr.split("").reduce((acc, digit) => acc + Math.pow(Number(digit), numOfDigits), 0);
+   return sum === num;
+};
+
+// Calculate Sum of Digits
+const getDigitSum = (num) => {
+   return Math.abs(num)
+      .toString()
+      .split("")
+      .reduce((acc, digit) => acc + Number(digit), 0);
+};
+
+// Endpoint
 app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
 
    if (!number) {
-      return res.status(400).json({
-         error: true,
-      });
+      return res.status(400).json({ error: "Missing number parameter" });
    }
 
    const num = Number(number);
-
-   // Check if the input is a valid number
    if (isNaN(num)) {
-      return res.status(400).json({
-         number: number,
-         error: true,
-      });
+      return res.status(400).json({ error: "Invalid number format" });
    }
 
-   // Check if Number is a Prime
-   const isPrime = () => {
-      if (number <= 1) return false;
-      if (number === 2) return true;
-      for (let i = 2; i <= Math.sqrt(number); i++) {
-         if (number % i === 0) return false;
-      }
-      return true;
-   };
-   const is_prime = isPrime();
-
-   // Check id Number is Perfect
-   const isPerfect = () => {
-      if (number <= 1) return false;
-      let sum = 1;
-      for (let i = 2; i <= Math.sqrt(number); i++) {
-         if (number % i === 0) {
-            if (number / i === i) {
-               sum += i;
-            } else {
-               sum += i + number / i;
-            }
-         }
-      }
-      return sum === Number(number);
-   };
-   const is_perfect = isPerfect();
-
-   // Check if Number is Armstrong
-   const isArmStrong = () => {
-      const numOfDigits = number.length;
-      let sum = null;
-      if (number > 0) {
-         sum = number.split("").reduce((acc, digit) => {
-            return acc + Math.pow(Number(digit), numOfDigits);
-         }, 0);
-      }
-
-      const armstrong = sum == number;
-      const numType = number % 2 === 0 ? "even" : "odd";
-
-      return armstrong ? ["armstrong", numType] : [numType];
-   };
-   const properties = isArmStrong();
-
-   // Calculate Sum of Digits
-   const getDigitSum = () => {
-      const digits = Math.abs(number).toString().split("");
-
-      const sum = digits.reduce((acc, digit) => acc + Number(digit), 0);
-
-      return sum;
-   };
-   const digit_sum = getDigitSum();
-
-   // Fetch the Fun Fact
-   const fun_fact = await funfact(number);
+   const [is_prime, is_perfect, armstrong, digit_sum, fun_fact] = await Promise.all([
+      isPrime(num),
+      isPerfect(num),
+      isArmstrong(num),
+      getDigitSum(num),
+      funfact(num),
+   ]);
 
    res.status(200).json({
-      number,
+      number: num,
       is_prime,
       is_perfect,
-      properties,
+      properties: armstrong ? ["armstrong", num % 2 === 0 ? "even" : "odd"] : [num % 2 === 0 ? "even" : "odd"],
       digit_sum,
       fun_fact,
    });
