@@ -62,12 +62,15 @@ app.get("/api/classify-number", async (req, res) => {
    const { number } = req.query;
 
    if (!number) {
-      return res.status(400).json({ error: "Missing number parameter" });
+      return res.status(400).json({ error: "Missing number" });
    }
 
    const num = Number(number);
    if (isNaN(num)) {
-      return res.status(400).json({ error: "Invalid number format" });
+      return res.status(400).json({
+         number: "alphabet",
+         error: true,
+      });
    }
 
    const [is_prime, is_perfect, armstrong, digit_sum, fun_fact] = await Promise.all([
